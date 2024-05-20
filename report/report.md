@@ -1,10 +1,24 @@
 # Chess Image Classification Project Report
 
 ## Project Overview
-The goal of this project is to classify chess pieces from images using a Convolutional Neural Network (CNN) built with PyTorch. The project is divided into three stages:
+The objective of this project was to design and implement a convolutional neural network (CNN) to classify images of chess pieces. The project involved multiple stages, each focusing on different aspects of model improvement and performance evaluation. This report provides a detailed account of the model choice, enhancement techniques, training process, and evaluation metrics. It also includes visual aids to illustrate the model's performance. The project is divided into three stages below:
 1. Training with basic data augmentation.
 2. Enhancing the model with additional data augmentation and batch normalization.
 3. Fine-tuning hyperparameters such as learning rate and batch size.
+
+## Techniques for Enhancement
+
+To enhance the model's performance, several techniques were employed:
+
+1. Data Augmentation: I applied various data augmentation techniques such as rotation, scaling, and flipping to increase the diversity of the training data and reduce overfitting.
+2. Batch Normalization: Batch normalization layers were added to stabilize and accelerate the training process.
+3. Learning Rate Scheduling: I experimented with different learning rates and batch sizes to find the optimal training configuration.
+4. Dropout: Dropout layers were used to prevent overfitting by randomly deactivating neurons during training.
+5. Transfer Learning: Although I started with a custom model, I incorporated transfer learning principles by initializing some layers with weights from a pre-trained model.
+
+## Training Process
+
+The training process was divided into three stages, each with different configurations to find the best setup for our model.
 
 ## Stage One: Basic Data Augmentation
 
@@ -112,16 +126,39 @@ The goal of this project is to classify chess pieces from images using a Convolu
 - Learning Rate 0.1, Batch Size 64: The best validation accuracy achieved is 58.14%.
 - Learning Rate 0.1, Batch Size 128: The best validation accuracy achieved is 65.12%.
 
-## Summary and Next Steps
+## Evaluation
 
-### Summary
+### Accuracy and Loss Graphs
+
+The graphs below illustrate the training and validation accuracy and loss over epochs for the best-performing configuration (Stage One).
+
+Training and Validation Accuracy:
+![Results plot](report/img/initial_results_plot.png)
+
+### Confusion Matrix
+
+The confusion matrix provides a detailed breakdown of the model's performance across different classes.
+
+![Confusion Matrix](report/img/initial_confusion_matrix_plot.png)
+
+## Discussion
+
+### Model Performance
 - Best Performance during training: The best overall validation accuracy (67.44%) was achieved during Stage One without additional augmentations and with the default learning rate and batch size.
 - Best Performance during Testing: The model from Stage Two performed better during testing, indicating that the additional augmentations and batch normalization provided more robust performance.
 - Stage Three: Experimentation with learning rates and batch sizes showed that a learning rate of 0.1 with a batch size of 128 yielded a high validation accuracy of 65.12%, but not surpassing Stage One's best.
 
-### Next Steps
+### Challenges:
+- Overfitting was a significant challenge, which was mitigated using dropout and data augmentation techniques.
+- Tuning the learning rate and batch size was critical to balancing model performance and training time.
+
+### Future Work
 1. Hyperparameter Optimization: Further tuning using a more granular approach to learning rates (e.g., 0.001, 0.005) and experimenting with different batch sizes.
 2. Model Architecture: Experiment with different CNN architectures or pre-trained models (e.g., ResNet, VGG) to see if a more complex model can yield better performance.
 3. Data Augmentation: Refine data augmentation techniques to avoid overfitting while providing diverse training samples.
 4. Regularization Techniques: Implement other regularization techniques like dropout or weight decay.
 5. Cross-Validation: Implement k-fold cross-validation to ensure model robustness and prevent overfitting.
+
+## Conclusion
+
+The CNN model developed for chess image classification achieved the best validation accuracy of 67.44%. Through various enhancement techniques such as data augmentation, batch normalization, and dropout, the model's performance improved significantly. Despite the challenges, the project demonstrated the effectiveness of CNNs in image classification tasks and provided valuable insights into model training and optimization strategies.
