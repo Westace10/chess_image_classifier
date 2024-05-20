@@ -1,17 +1,14 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+import streamlit as st
+import time
+import torch
+import io
+import requests
+import torch.nn.functional as F
+from torchvision import transforms, models
 from PIL import Image
 from io import BytesIO
 from torch import nn
-from torchvision import models
-import io
-import torch
-import torch.nn.functional as F
-import torchvision.transforms as transforms
-import torch
-import requests
 
-
-app = FastAPI()
 
 class ChessClassifierWithBatchNorm(nn.Module):
     def __init__(self, num_classes=6):
@@ -54,7 +51,7 @@ class ChessClassifierWithBatchNorm(nn.Module):
 
 def load_checkpoint():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    filepath = "app/checkpoint-epoch(7)-18:01:34.pth"
+    filepath = "strapp/checkpoint-epoch(7)-18:01:34.pth"
     checkpoint = torch.load(filepath, map_location=device)
     model = ChessClassifierWithBatchNorm()
     model.classifier = checkpoint['classifier']
@@ -68,11 +65,12 @@ class_names = ['Pawn', 'Rook', 'Knight', 'Bishop', 'Queen', 'King']
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = load_checkpoint()
 
+# Define the data transformations
 data_transforms = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.CenterCrop(224),
-    transforms.Grayscale(num_output_channels=3),
     transforms.ToTensor(),
+    transforms.Grayscale(num_output_channels=3),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
@@ -93,28 +91,34 @@ def predict(image_bytes):
     top_indices = top_indices.cpu().numpy()[0]
     return top_probabilities, top_indices
 
-@app.post("/predict")
-async def prediction(file: UploadFile = File(...)):
-    try:
-        # Read the uploaded image data
-        contents = await file.read()
-        
-        # Make a prediction
-        top_probabilities, top_indices = predict(contents)
-        
-        # Map indices to class labels
-        top_classes = [class_names[idx] for idx in top_indices]
+# Define the Streamlit app
+st.title("Chess Image Classification")
+st.write("Upload an image to classify it as a chess piece.")
 
-        # Prepare the response
-        response = {
-            "predictions": [{"class_name": top_classes[i], "confidence": float(top_probabilities[i])} for i in range(len(top_classes))]
-        }
+# Upload image
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-        return response
+if uploaded_file is not None:
+    # Display the uploaded image
+    image = Image.open(uploaded_file)
+    st.image(image, caption="Uploaded Image.", use_column_width=True)
+    st.write("")
+    st.write("Classifying...")
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+    # Measure latency and throughput
+    start_time = time.time()
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Make a prediction
+    top_probabilities, top_indices = predict(image)
+    
+    # end time
+    end_time = time.time()
+    
+    # Calculate latency
+    latency = end_time - start_time
+    
+    # Map indices to class labels
+    top_class = [class_names[idx] for idx in top_indices]
+
+    st.write(f"Predicted Class: {top_class}")
+    st.write(f"Latency: {latency:.4f} seconds")
