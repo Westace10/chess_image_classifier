@@ -215,7 +215,7 @@ def plot_evaluation(class_folders, precision, recall, f1_score, img_name):
     ax.set_xticklabels(class_folders)
     ax.legend()
 
-    plt.savefig(f'img/{img_name}.png')
+    plt.savefig(f'report/img/{img_name}.png')
     plt.show()
 
 def plot_conf_matrix(class_folders, conf_matrix, img_name):
@@ -225,5 +225,5 @@ def plot_conf_matrix(class_folders, conf_matrix, img_name):
     ax.set_xlabel('Predicted Labels')
     ax.set_ylabel('True Labels')
     ax.set_title('Confusion Matrix')
-    plt.savefig(f'img/{img_name}.png')
+    plt.savefig(f'report/img/{img_name}.png')
     plt.show()
