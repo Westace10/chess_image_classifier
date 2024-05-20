@@ -6,6 +6,11 @@ This project involves creating a deep learning model to classify images of chess
 ## Getting Started
 These instructions will guide you through setting up the project on your local machine for development and testing purposes.
 
+## Repository Structure
+- `notebooks/`: Contains Jupyter Notebook demonstrating coding and pipeline execution.
+- `report/`: Contains the comprehensive report.
+- `development/`: Contains Dockerized pipelines for Streamlit and FastAPI interfaces.
+
 ### Dependencies
 Ensure you have the following dependencies installed:
 - Python 3.8+
