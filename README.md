@@ -422,12 +422,14 @@ Ensure you have the following dependencies installed:
 4. **Run the Docker container:**
 
     ```bash
-    docker run -d --name chesscontainer -p 80:80 chessclassifier
+    docker run -d --name chesscontainer -p 80:80 -p 8501:8501 chessclassifier
     ```
 
 5. **Verify the application is running:**
 
     Open your web browser and go to `http://0.0.0.0:80`. You should see your FastAPI application running.
+
+    Streamlit application will be accessible at http://localhost:8501.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
